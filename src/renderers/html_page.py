@@ -25,3 +25,13 @@ def render_word_search_page(
     ctx = {**(style or {}), "title": title, "subtitle": subtitle,
            "table_html": table_html, "words": words}
     return _env.get_template("word_search_activity.html.j2").render(**ctx)
+
+
+def render_dot_connect_page(
+    dot_svg: str,
+    title: str = "¡Uní los puntos!",
+    subtitle: str = "",
+    style: dict | None = None,
+) -> str:
+    ctx = {**(style or {}), "title": title, "subtitle": subtitle, "dot_svg": dot_svg}
+    return _env.get_template("dot_connect_activity.html.j2").render(**ctx)
