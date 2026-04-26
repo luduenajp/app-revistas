@@ -13,7 +13,8 @@ if str(_ROOT) not in sys.path:
 
 from src.generators.maze import generate_maze
 from src.generators.word_search import generate_word_search
-from src.renderers.html_page import render_maze_page, render_word_search_page
+from src.generators.dot_connect import generate_dot_connect
+from src.renderers.html_page import render_maze_page, render_word_search_page, render_dot_connect_page
 from src.renderers.pdf_export import export_html_to_pdf
 
 STYLE_INFANTIL = {
@@ -57,6 +58,17 @@ def main():
     )
     pdf2 = export_html_to_pdf(ws_html, OUT / "dinos_sopa.pdf")
     print(f"✓ Sopa de letras: {pdf2}")
+
+    # Unir con puntos
+    dc = generate_dot_connect("dinosaurio", difficulty="easy")
+    dc_html = render_dot_connect_page(
+        dc.svg_html,
+        title="¡Uní los puntos y descubrí el dino!",
+        subtitle=f"Empezá por el 1 y seguí en orden. ({len(dc.dots)} puntos)",
+        style=STYLE_INFANTIL,
+    )
+    pdf3 = export_html_to_pdf(dc_html, OUT / "dinos_puntos.pdf")
+    print(f"✓ Unir con puntos: {pdf3}")
 
 
 if __name__ == "__main__":
