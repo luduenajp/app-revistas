@@ -11,13 +11,8 @@ def render_maze_page(
     subtitle: str = "",
     style: dict | None = None,
 ) -> str:
-    tmpl = _env.get_template("maze_activity.html.j2")
-    return tmpl.render(
-        title=title,
-        subtitle=subtitle,
-        maze_svg=maze_svg,
-        **(style or {}),
-    )
+    ctx = {**(style or {}), "title": title, "subtitle": subtitle, "maze_svg": maze_svg}
+    return _env.get_template("maze_activity.html.j2").render(**ctx)
 
 
 def render_word_search_page(
@@ -27,11 +22,6 @@ def render_word_search_page(
     subtitle: str = "",
     style: dict | None = None,
 ) -> str:
-    tmpl = _env.get_template("word_search_activity.html.j2")
-    return tmpl.render(
-        title=title,
-        subtitle=subtitle,
-        table_html=table_html,
-        words=words,
-        **(style or {}),
-    )
+    ctx = {**(style or {}), "title": title, "subtitle": subtitle,
+           "table_html": table_html, "words": words}
+    return _env.get_template("word_search_activity.html.j2").render(**ctx)
