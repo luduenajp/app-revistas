@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import random
 import string
 
@@ -22,8 +22,13 @@ def generate_word_search(
     directions: str = 'all',
     seed: int | None = None,
 ) -> WordSearchResult:
+    if directions == 'all':
+        dirs = _ALL_DIRS
+    elif directions == 'simple':
+        dirs = _SIMPLE_DIRS
+    else:
+        raise ValueError(f"directions must be 'all' or 'simple', got {directions!r}")
     rng = random.Random(seed)
-    dirs = _ALL_DIRS if directions == 'all' else _SIMPLE_DIRS
 
     grid = [[''] * cols for _ in range(rows)]
     placed_words: list[str] = []
