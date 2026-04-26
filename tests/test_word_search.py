@@ -44,10 +44,13 @@ def test_directions_simple():
         assert dr == 0 or dc == 0
 
 
-def test_html_output_contains_words():
-    result = generate_word_search(["DINO", "GATO"], 10, 10, seed=2)
-    for word in result.placed_words:
-        assert word in result.html_table
+def test_html_output_contains_word_cells():
+    result = generate_word_search(["DINO"], 10, 10, seed=2)
+    # Verify each letter of placed words appears as a <td> in the table
+    for word, (r, c, dr, dc) in result.placements.items():
+        for i, ch in enumerate(word):
+            assert f"<td" in result.html_table
+            assert result.grid[r + dr * i][c + dc * i] == ch
 
 
 def test_html_is_table():

@@ -51,7 +51,7 @@ def generate_word_search(
             if not grid[r][c]:
                 grid[r][c] = rng.choice(string.ascii_uppercase)
 
-    html_table = _render_html(grid, placements, placed_words)
+    html_table = _render_html(grid, placements)
     return WordSearchResult(grid, placed_words, placements, html_table)
 
 
@@ -75,7 +75,7 @@ def _try_place(grid, word, rows, cols, dirs, rng, attempts):
     return None
 
 
-def _render_html(grid: list[list[str]], placements: dict, placed_words: list[str]) -> str:
+def _render_html(grid: list[list[str]], placements: dict) -> str:
     # Construir set de celdas que pertenecen a palabras (para resaltar en clave)
     solution_cells: set[tuple] = set()
     for word, (r, c, dr, dc) in placements.items():
@@ -96,8 +96,4 @@ def _render_html(grid: list[list[str]], placements: dict, placed_words: list[str
         + "</table>"
     )
 
-    # Word list — needed for the activity and used by tests to verify words appear
-    word_items = "".join(f"<li>{w}</li>" for w in placed_words)
-    word_list = f'<ul class="word-list">{word_items}</ul>'
-
-    return table + word_list
+    return table
