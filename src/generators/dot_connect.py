@@ -45,7 +45,7 @@ def generate_dot_connect(
 
     img_h, img_w = binary.shape
     dots = [
-        (col / img_w * width_px, row / img_h * height_px)
+        (col / (img_w - 1) * width_px, row / (img_h - 1) * height_px)
         for row, col in sampled
     ]
 
@@ -54,6 +54,11 @@ def generate_dot_connect(
 
 
 def _resample_contour(contour: np.ndarray, n: int) -> list[tuple[float, float]]:
+    if len(contour) < n:
+        raise ValueError(
+            f"Contour has only {len(contour)} points; cannot sample {n} dots. "
+            "Use a higher-resolution or less-stylised silhouette."
+        )
     diffs = np.diff(contour, axis=0)
     seg_lengths = np.hypot(diffs[:, 0], diffs[:, 1])
     cum_len = np.concatenate([[0.0], np.cumsum(seg_lengths)])
