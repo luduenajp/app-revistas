@@ -3,10 +3,11 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 from skimage.measure import find_contours
 
 _SHAPES_DIR = Path(__file__).parent.parent / "shapes"
-_DIFFICULTY = {"easy": 15, "hard": 28}
+_DIFFICULTY = {"easy": 15, "medium": 30, "hard": 50, "expert": 80}
 
 
 @dataclass
@@ -22,18 +23,19 @@ def generate_dot_connect(
     difficulty: str = "easy",
     width_px: int = 400,
     height_px: int = 400,
+    n_dots: int | None = None,
 ) -> DotConnectResult:
     if difficulty not in _DIFFICULTY:
-        raise ValueError(f"difficulty must be 'easy' or 'hard', got {difficulty!r}")
+        raise ValueError(f"difficulty must be one of {list(_DIFFICULTY)}, got {difficulty!r}")
 
     path = _SHAPES_DIR / f"{figure}.png"
     if not path.exists():
         raise FileNotFoundError(f"Shape '{figure}' not found in {_SHAPES_DIR}")
 
-    n_dots = _DIFFICULTY[difficulty]
+    n_dots = n_dots if n_dots is not None else _DIFFICULTY[difficulty]
 
     img = Image.open(path).convert("L")
-    binary = (np.array(img) < 128).astype(float)
+    binary = _to_binary_mask(np.array(img))
 
     contours = find_contours(binary, level=0.5)
     if not contours:
@@ -51,6 +53,17 @@ def generate_dot_connect(
 
     svg_html = _render_svg(dots, width_px, height_px)
     return DotConnectResult(dots=dots, label=figure, difficulty=difficulty, svg_html=svg_html)
+
+
+def _to_binary_mask(arr: np.ndarray) -> np.ndarray:
+    dark = arr < 128
+    if dark.mean() > 0.15:
+        # Silueta rellena: usar píxeles oscuros directamente
+        return dark.astype(float)
+    # Dibujo lineal (outline): dilatar trazos → rellenar interior → contorno exterior
+    closed = ndimage.binary_dilation(dark, iterations=6)
+    filled = ndimage.binary_fill_holes(closed)
+    return filled.astype(float)
 
 
 def _resample_contour(contour: np.ndarray, n: int) -> list[tuple[float, float]]:
