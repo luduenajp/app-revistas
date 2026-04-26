@@ -1,0 +1,18 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<h1>{{ title }}</h1>
+{% if subtitle %}<p>{{ subtitle }}</p>{% endif %}
+<div style="display:flex; gap:8mm; align-items:flex-start;">
+  <div>
+    {{ table_html | safe }}
+  </div>
+  <div>
+    <h2 style="margin-bottom:3mm;">Buscá estas palabras</h2>
+    <ul class="word-list">
+      {% for word in words %}
+      <li>{{ word }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

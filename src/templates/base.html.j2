@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="{{ lang | default('es') }}">
+<head>
+<meta charset="UTF-8">
+<title>{{ title }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family={{ font_family | default('Nunito:wght@400;700;900') }}&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables de estilo por línea ───────────────────────── */
+  :root {
+    --font: '{{ font_name | default('Nunito') }}', sans-serif;
+    --color-primary: {{ color_primary | default('#e74c3c') }};
+    --color-accent:  {{ color_accent  | default('#f39c12') }};
+    --color-bg:      {{ color_bg      | default('#fffdf8') }};
+    --color-text:    {{ color_text    | default('#2c3e50') }};
+    --bleed: 3mm;
+    --safe: 8mm; /* margen seguro interior */
+  }
+
+  /* ── Reset ────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Página A4 + sangrado ─────────────────────────────────── */
+  @page {
+    size: 216mm 303mm;  /* A4 + 3mm sangrado por cada lado */
+    margin: 0;
+  }
+
+  html, body {
+    width: 216mm;
+    height: 303mm;
+    overflow: hidden;
+    background: white;
+    font-family: var(--font);
+    color: var(--color-text);
+  }
+
+  /* ── Caja con sangrado (área total imprimible) ────────────── */
+  .bleed-box {
+    position: relative;
+    width: 216mm;
+    height: 303mm;
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  /* ── Marcas de corte ──────────────────────────────────────── */
+  .crop-mark { position: absolute; background: #000; z-index: 100; }
+  .crop-mark.top-left-h  { top: 3mm; left: 0;    width: 2mm; height: 0.25pt; }
+  .crop-mark.top-left-v  { top: 0;   left: 3mm;  width: 0.25pt; height: 2mm; }
+  .crop-mark.top-right-h { top: 3mm; right: 0;   width: 2mm; height: 0.25pt; }
+  .crop-mark.top-right-v { top: 0;   right: 3mm; width: 0.25pt; height: 2mm; }
+  .crop-mark.bot-left-h  { bottom: 3mm; left: 0;    width: 2mm; height: 0.25pt; }
+  .crop-mark.bot-left-v  { bottom: 0;   left: 3mm;  width: 0.25pt; height: 2mm; }
+  .crop-mark.bot-right-h { bottom: 3mm; right: 0;   width: 2mm; height: 0.25pt; }
+  .crop-mark.bot-right-v { bottom: 0;   right: 3mm; width: 0.25pt; height: 2mm; }
+
+  /* ── Área segura (contenido real) ────────────────────────── */
+  .safe-area {
+    position: absolute;
+    top: calc(var(--bleed) + var(--safe));
+    left: calc(var(--bleed) + var(--safe));
+    right: calc(var(--bleed) + var(--safe));
+    bottom: calc(var(--bleed) + var(--safe));
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+  }
+
+  /* ── Tipografía base ──────────────────────────────────────── */
+  h1 { font-size: 22pt; color: var(--color-primary); line-height: 1.1; }
+  h2 { font-size: 14pt; color: var(--color-primary); }
+  p  { font-size: 11pt; line-height: 1.5; }
+
+  /* ── Sopa de letras ───────────────────────────────────────── */
+  table.word-search {
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    font-size: 11pt;
+    font-weight: bold;
+  }
+  table.word-search td {
+    width: 7mm; height: 7mm;
+    text-align: center; vertical-align: middle;
+    border: 0.5pt solid #ccc;
+    color: var(--color-text);
+  }
+  table.word-search td.sol { color: var(--color-primary); }
+
+  /* ── SVG laberinto ────────────────────────────────────────── */
+  .maze-container svg { max-width: 100%; height: auto; }
+
+  /* ── Lista de palabras ────────────────────────────────────── */
+  .word-list {
+    display: flex; flex-wrap: wrap; gap: 4mm;
+    font-size: 10pt; font-weight: 700;
+    list-style: none;
+  }
+  .word-list li { background: var(--color-accent); color: white;
+    padding: 1mm 3mm; border-radius: 2mm; }
+</style>
+</head>
+<body>
+<div class="bleed-box">
+  <!-- Marcas de corte -->
+  <div class="crop-mark top-left-h"></div>
+  <div class="crop-mark top-left-v"></div>
+  <div class="crop-mark top-right-h"></div>
+  <div class="crop-mark top-right-v"></div>
+  <div class="crop-mark bot-left-h"></div>
+  <div class="crop-mark bot-left-v"></div>
+  <div class="crop-mark bot-right-h"></div>
+  <div class="crop-mark bot-right-v"></div>
+
+  <!-- Contenido de la página -->
+  <div class="safe-area">
+    {% block content %}{% endblock %}
+  </div>
+</div>
+</body>
+</html>
