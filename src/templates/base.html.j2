@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>{{ title }}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family={{ font_family | default('Nunito:wght@400;700;900') }}&display=swap" rel="stylesheet">
 <style>
   /* ── Variables de estilo por línea ───────────────────────── */
@@ -46,14 +47,14 @@
 
   /* ── Marcas de corte ──────────────────────────────────────── */
   .crop-mark { position: absolute; background: #000; z-index: 100; }
-  .crop-mark.top-left-h  { top: 3mm; left: 0;    width: 2mm; height: 0.25pt; }
-  .crop-mark.top-left-v  { top: 0;   left: 3mm;  width: 0.25pt; height: 2mm; }
-  .crop-mark.top-right-h { top: 3mm; right: 0;   width: 2mm; height: 0.25pt; }
-  .crop-mark.top-right-v { top: 0;   right: 3mm; width: 0.25pt; height: 2mm; }
-  .crop-mark.bot-left-h  { bottom: 3mm; left: 0;    width: 2mm; height: 0.25pt; }
-  .crop-mark.bot-left-v  { bottom: 0;   left: 3mm;  width: 0.25pt; height: 2mm; }
-  .crop-mark.bot-right-h { bottom: 3mm; right: 0;   width: 2mm; height: 0.25pt; }
-  .crop-mark.bot-right-v { bottom: 0;   right: 3mm; width: 0.25pt; height: 2mm; }
+  .crop-mark.top-left-h  { top: 3mm; left: 0;    width: 2mm; height: 0.5pt; }
+  .crop-mark.top-left-v  { top: 0;   left: 3mm;  width: 0.5pt; height: 2mm; }
+  .crop-mark.top-right-h { top: 3mm; right: 0;   width: 2mm; height: 0.5pt; }
+  .crop-mark.top-right-v { top: 0;   right: 3mm; width: 0.5pt; height: 2mm; }
+  .crop-mark.bot-left-h  { bottom: 3mm; left: 0;    width: 2mm; height: 0.5pt; }
+  .crop-mark.bot-left-v  { bottom: 0;   left: 3mm;  width: 0.5pt; height: 2mm; }
+  .crop-mark.bot-right-h { bottom: 3mm; right: 0;   width: 2mm; height: 0.5pt; }
+  .crop-mark.bot-right-v { bottom: 0;   right: 3mm; width: 0.5pt; height: 2mm; }
 
   /* ── Área segura (contenido real) ────────────────────────── */
   .safe-area {
